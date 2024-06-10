@@ -1,5 +1,5 @@
-import { View } from "react-native";
+import Login from "../screens/login";
 
 export default Router = () => {
-  return <View></View>;
+  return <Login />;
 };
