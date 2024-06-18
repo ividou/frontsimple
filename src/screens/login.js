@@ -6,7 +6,7 @@ import { useState } from "react";
 import Boton from "../components/boton";
 import { loginApi } from "../apis/login";
 
-export default Login = () => {
+export default Login = ({ navigation }) => {
   const [user, setUser] = useState();
   const [password, setPassword] = useState();
 
@@ -59,7 +59,18 @@ export default Login = () => {
               value={password}
               onChange={setPassword}
             />
-            <Boton texto="ingresar" onClick={() => handleLogin()} />
+            <Boton
+              texto="ingresar"
+              onClick={() => {
+                navigation.navigate("tabs");
+              }}
+            />
+            <Boton
+              texto="Crear cuenta"
+              onClick={() => {
+                navigation.navigate("crearCuenta");
+              }}
+            />
           </View>
           <View style={{ backgroundColor: "orange", flex: 0.1 }}></View>
         </ImageBackground>

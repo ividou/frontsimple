@@ -1,5 +1,10 @@
-import Login from "../screens/login";
+import { NavigationContainer } from "@react-navigation/native";
+import StackScreen from "./stack";
 
 export default Router = () => {
-  return <Login />;
+  return (
+    <NavigationContainer>
+      <StackScreen />
+    </NavigationContainer>
+  );
 };
