@@ -5,14 +5,21 @@ import PassInput from "../components/passinput";
 import { useState } from "react";
 import Boton from "../components/boton";
 import { loginApi } from "../apis/login";
+import { save } from "../utils/storage";
 
 export default Login = ({ navigation }) => {
-  const [user, setUser] = useState();
+  const [dni, setDni] = useState();
   const [password, setPassword] = useState();
 
   const handleLogin = async (dni, password) => {
     const Data = await loginApi(dni, password);
-    console.log(Data);
+    if (Data.success) {
+      const guardar = save("token", Data.token);
+      if (guardar) navigation.navigate("tabs");
+    } else {
+      //tarea 1
+      //mostrar un mensaje al usuario diciendo usuario o contraseña incorrecta
+    }
   };
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -51,8 +58,8 @@ export default Login = ({ navigation }) => {
             <Input
               label="nombre de usuario"
               icon="account"
-              value={user}
-              onChange={setUser}
+              value={dni}
+              onChange={setDni}
             />
             <PassInput
               label="ingrese su contraseña"
@@ -62,7 +69,7 @@ export default Login = ({ navigation }) => {
             <Boton
               texto="ingresar"
               onClick={() => {
-                navigation.navigate("tabs");
+                handleLogin(dni, password);
               }}
             />
             <Boton
@@ -72,7 +79,7 @@ export default Login = ({ navigation }) => {
               }}
             />
           </View>
-          <View style={{ backgroundColor: "orange", flex: 0.1 }}></View>
+          <View style={{ flex: 0.1 }}></View>
         </ImageBackground>
       </View>
     </SafeAreaView>

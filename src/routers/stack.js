@@ -19,7 +19,11 @@ export default StackScreen = () => {
         options={{ headerShown: false }}
       />
       {/* importar los tabs */}
-      <Stack.Screen component={tabs} name="tabs" />
+      <Stack.Screen
+        component={tabs}
+        name="tabs"
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
