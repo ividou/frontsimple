@@ -1,36 +1,84 @@
-import { View } from "react-native";
-import { Text } from "react-native-paper";
+import React, { useEffect, useState } from "react";
+import { View, FlatList, StyleSheet, Text } from "react-native";
 import { getValueFor } from "../utils/storage";
-import { useEffect, useState } from "react";
 import { materiasapi } from "../apis/getmaterias";
 
-//obtener el token
-//solicitar la lista de materias
-export default Home = () => {
+const Home = () => {
   const [token, setToken] = useState();
   const [materias, setMaterias] = useState([]);
 
   useEffect(() => {
     const getToken = async () => {
-      const token = await getValueFor("token");
-      setToken(token);
+      const tokenn = await getValueFor("token");
+      setToken(tokenn);
+      obtenerMateria(tokenn);
     };
 
     const obtenerMateria = async (token) => {
       const Data = await materiasapi(token);
       console.log("materias", Data);
-      setMaterias(Data);
+      setMaterias(Data.materias);
     };
-    getToken();
-    obtenerMateria(token);
-  }, []);
+
+    if (token) {
+      obtenerMateria(token);
+    } else {
+      getToken();
+    }
+  }, [token]);
+
+  const Item = ({ nombre }) => (
+    <View style={styles.card}>
+      <Text style={styles.title}>{nombre}</Text>
+    </View>
+  );
 
   return (
-    <View>
-      <Text>Home</Text>
-      {/* Listar las materias
-      usar flatlist
-      crear card para las materias */}
+    <View style={styles.container}>
+      <Text style={styles.header}>Home</Text>
+      <FlatList
+        data={materias}
+        renderItem={({ item }) => <Item nombre={item.nombre} />}
+        keyExtractor={(item) => item.id}
+      />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 20,
+    backgroundColor: "#f0f0f0",
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  card: {
+    backgroundColor: "#4caf50",
+    padding: 30,
+    marginVertical: 15,
+    marginHorizontal: 25,
+    borderRadius: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    elevation: 6,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#ffffff",
+  },
+  description: {
+    marginTop: 10,
+    fontSize: 14,
+    color: "#555",
+  },
+});
+
+export default Home;

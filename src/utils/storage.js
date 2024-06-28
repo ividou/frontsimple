@@ -31,3 +31,13 @@ export const deleteValue = async (key) => {
     return false;
   }
 };
+
+export const getToken = async () => {
+  try {
+    let token = await SecureStore.getItemAsync("token");
+    return token;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};

@@ -8,8 +8,9 @@ import { loginApi } from "../apis/login";
 import { save } from "../utils/storage";
 
 export default Login = ({ navigation }) => {
-  const [dni, setDni] = useState();
-  const [password, setPassword] = useState();
+  const [dni, setDni] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // Estado para el mensaje de error
 
   const handleLogin = async (dni, password) => {
     const Data = await loginApi(dni, password);
@@ -17,10 +18,10 @@ export default Login = ({ navigation }) => {
       const guardar = save("token", Data.token);
       if (guardar) navigation.navigate("tabs");
     } else {
-      //tarea 1
-      //mostrar un mensaje al usuario diciendo usuario o contraseña incorrecta
+      setErrorMessage("Usuario o contraseña incorrecta"); // Actualizar el mensaje de error
     }
   };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
@@ -66,6 +67,9 @@ export default Login = ({ navigation }) => {
               value={password}
               onChange={setPassword}
             />
+            {errorMessage ? ( // Mostrar el mensaje de error si existe
+              <Text style={styles.errorText}>{errorMessage}</Text>
+            ) : null}
             <Boton
               texto="ingresar"
               onClick={() => {
@@ -88,8 +92,12 @@ export default Login = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: Platform.OS === "android" && 25,
-
+    marginTop: Platform.OS === "android" ? 25 : 0,
     flex: 1,
+  },
+  errorText: {
+    color: "red",
+    alignSelf: "center",
+    marginTop: 10,
   },
 });
